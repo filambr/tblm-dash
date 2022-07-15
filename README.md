@@ -35,7 +35,7 @@ Share - fit shared value
 
 ### Instalation
 
-#To use install these python packeges:
+### To use install these python packeges:
 
 pip install numpy
 
@@ -49,7 +49,7 @@ pip install jupyter-dash
 
 pip install dash-daq
 
-#If you are using Anaconda distribution, only additional packages that should be instaled are: 
+### If you are using Anaconda distribution, only additional packages that should be instaled are: 
 
 conda install -c conda-forge dash
 
