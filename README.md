@@ -1,10 +1,10 @@
 ### This Depository is for fitting electrochemical impedance spectra of tethered lipid bilayer. 
 
-Model used is discribed in folowing publicaitons [doi], [doi]. Fitting procedure herein extends homogenouse admittance model to heterogenouse model by assuming some unknown underlying denisty destribution funciton.
+Model used is discribed in folowing publicaitons [doi.org/10.1021/la204054g], [doi.org/10.1016/j.bioelechem.2022.108092]. Fitting procedure herein extends homogenouse admittance model to heterogenouse model by assuming some unknown underlying denisty destribution funciton.
 
 $Y_{tot} = \int{Y(N_{def}, f) P(N_{def})} dN_{def}$
 
-Distribution funciton $P$ is obtained by solving regularized and discretized version of equation above [doi].
+Distribution funciton $P$ is obtained by solving regularized and discretized version of equation above [doi.org/10.1016/j.bioelechem.2022.108092].
 
 Main Purpose is to simultaniously fit sever spectra that share distribution function, or one spectra at a time otherwise. pH change, tempreture change or electorde polarization can influance some parameters of the model:
 
@@ -56,6 +56,8 @@ conda install -c conda-forge dash
 conda install -c conda-forge jupyter-dash
 
 conda install -c conda-forge dash-daq
+
+
 
 
 
