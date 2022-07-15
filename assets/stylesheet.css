@@ -1,0 +1,21 @@
+.app-button{
+  background-color: #008CBA; 
+  color: white;
+  border-color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
+.app-button-small{
+  background-color: #008CBA; 
+  border-color: white;
+  color: white;
+  padding: 10px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}

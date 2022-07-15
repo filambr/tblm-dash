@@ -3,22 +3,17 @@ import pandas as pd
 import plotly.express as px
 from jupyter_dash import JupyterDash
 from dash import Dash
-# import dash_core_components as dcc
-# import dash_html_components as html
 from dash import html, dash_table, dcc, callback_context
-# import dash_table
 from dash.dependencies import Input, Output, State
 from dash import dash_table
 import dash_bootstrap_components as dbc
 from dash.exceptions import PreventUpdate
-from dash.long_callback import DiskcacheLongCallbackManager
 import base64
 import datetime
 import io
 import plotly.graph_objects as go
 import numpy as np
 from plotly.subplots import make_subplots
-import diskcache
 from dash.dash_table.Format import Format, Scheme, Group
 from zipfile import ZipFile
 import dash_daq as daq
@@ -55,8 +50,13 @@ def parse_contents(contents, filename, date, area):
 
 def add_row(app):
     @app.callback([Output('tbl-par-val', 'data'), Output('btn-par-val-clicks','data')], [State('tbl-par-val', 'columns'), State('tbl-par-val', 'data'),
-                                          Input('btn-par-val','n_clicks'), State('btn-par-val-clicks','data')])
-    def add_row_init_values(columns, rows, n_clicks, click_count):
+                                          Input('btn-par-val','n_clicks'), Input('btn-par-val-remove','n_clicks'), State('btn-par-val-clicks','data')])
+    def add_row_init_values(columns, rows, n_clicks, n_click_remove, click_count):
+        changed_id = [p['prop_id'] for p in callback_context.triggered][0]
+        if not changed_id:
+            raise PreventUpdate  
+        if 'btn-par-val-remove' in changed_id:
+            return rows[0:-1], n_clicks
         updated_click_count = 0
         if click_count is None:
             if n_clicks > 0:
@@ -74,8 +74,13 @@ def add_row(app):
 
     @app.callback([Output('tbl-par-stat', 'data'), Output('btn-par-stat-clicks','data')],
                   [State('tbl-par-stat', 'columns'),State('tbl-par-stat', 'data'),
-                  Input('btn-par-stat','n_clicks'), State('btn-par-stat-clicks','data')])
-    def add_row_status(columns, rows, n_clicks, click_count):
+                  Input('btn-par-stat','n_clicks'),Input('btn-par-stat-remove','n_clicks'), State('btn-par-stat-clicks','data')])
+    def add_row_status(columns, rows, n_clicks, n_click_remove, click_count):
+        changed_id = [p['prop_id'] for p in callback_context.triggered][0]
+        if not changed_id:
+            raise PreventUpdate  
+        if 'btn-par-stat-remove' in changed_id:
+            return rows[0:-1], n_clicks
         updated_click_count = 0
         if click_count is None:
             if n_clicks > 0:
@@ -309,6 +314,7 @@ def master_callback(app):
                   Output('Data', 'data'),
                   Output('fit-Data','data'),
                   Output('fit-pdf','data'),
+                  Output('fited-kwargs', 'data'),
 
 #                   Output('clear', 'value'),
                   Input('display-data','n_clicks'),
@@ -323,6 +329,7 @@ def master_callback(app):
                   
                   State('fit-pdf','data'),                  
                   State('fit-Data','data'),
+                  State('fited-kwargs', 'data'),
                   State('Data','data'),
                   State('g1', 'figure'),
                   State('g2', 'figure'),
@@ -342,7 +349,7 @@ def master_callback(app):
                  )
     def master(n, value, btn_clear, btn_fit,
                      list_of_contents, list_of_names, list_of_dates, area,
-                     fit_pdf, fit_data, data,
+                     fit_pdf, fit_data, fitted_kwargs, data,
                      figure1, figure2, figure3, figure4,
                      kwargs, kwargs_status, n_range, alp, algorithm,
                      bmin, bmax
@@ -389,7 +396,7 @@ def master_callback(app):
             figure2 = fig_nice(figure2)
             figure3 = fig_nice(figure3)
             figure4 = fig_nice(figure4)
-            return figure1, figure2, figure3, figure4, 'Plot Data', None, None, None
+            return figure1, figure2, figure3, figure4, 'Plot Data', None, None, None, None
         if 'upload-data' in changed_id:
             print('trying to upload data')
 
@@ -412,7 +419,7 @@ def master_callback(app):
             figure2 = fig_nice(figure2)
             figure3 = fig_nice(figure3)
             figure4 = fig_nice(figure4)
-            return figure1, figure2, figure3, figure4, 'Plot Data', children, None, None
+            return figure1, figure2, figure3, figure4, 'Plot Data', children, None, None, None
         
         elif figure1 is None:
             figure1 = make_subplots(rows=1, cols=1,
@@ -464,7 +471,7 @@ def master_callback(app):
             figure4 = fig_nice(figure4)
             
 
-            return figure1, figure2, figure3, figure4, 'Replot Data', data, fit_data, fit_pdf
+            return figure1, figure2, figure3, figure4, 'Replot Data', data, fit_data, fit_pdf, fitted_kwargs
         else:
             raise PreventUpdate
 
