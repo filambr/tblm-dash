@@ -307,16 +307,7 @@ class Model:
                                                            fitted_pars, args['logN'],
                                                            mapp=CFF.mapp
             )
-            for f, Yfit, Yexp in zip(args['f'], Y, args['Y']):
-                plt.plot(np.log10(f), 180/np.pi*np.angle(Yfit))
-                plt.scatter(np.log10(f), 180/np.pi*np.angle(Yexp))
-            plt.show()
-            for f, Yfit, Yexp in zip(args['f'], Y, args['Y']):
-                plt.scatter(np.real(1/(1j*np.pi*2*f*(1/Yexp))), -np.imag(1/(1j*np.pi*2*f*(1/Yexp))))
-                plt.plot(np.real(1/(1j*np.pi*2*f*(1/Yfit))), -np.imag(1/(1j*np.pi*2*f*(1/Yfit))))
-            plt.show()
-            plt.plot(args['logN'][0], pdf['dist'])
-            plt.show()
+
             self.Data_fitted = []
             for fexp, yfit in zip(args['f'], Y):
                 data_fitted = pd.DataFrame({'f':fexp,
@@ -372,14 +363,7 @@ class Model:
                                                                   fitted_pars, args_list['logN']
             )
             self.fitted_kwargs = [fitted_kwargs]
-            plt.scatter(np.log10(args_list['f']), 180/np.pi*np.angle(args_list['Y']))
-            plt.plot(np.log10(args_list['f']), 180/np.pi*np.angle(Y))
-            plt.show()
-            plt.scatter(np.real(1/(1j*np.pi*2*args_list['f']*args_list['Y']**-1)), -np.imag(1/(1j*np.pi*2*args_list['f']*args_list['Y']**-1)))
-            plt.plot(np.real(1/(1j*np.pi*2*args_list['f']*(1/Y))), -np.imag(1/(1j*np.pi*2*args_list['f']*(1/Y))))
-            plt.show()
-            plt.plot(args_list['logN'], pdf['dist'])
-            plt.show()
+
 
             data_fitted = pd.DataFrame({'f':args_list['f'],
                            'zr':np.real(1/Y),
